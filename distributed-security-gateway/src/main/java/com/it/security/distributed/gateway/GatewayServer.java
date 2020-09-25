@@ -1,19 +1,20 @@
-package com.it.security.distributed;
+package com.it.security.distributed.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 /**
- * @author YanQin
- * @version v1.0.0
- * @Description : TODO
- * @Create on : 2020/9/21 19:18
+ * @author Administrator
+ * @version 1.0
  **/
 @SpringBootApplication
+@EnableZuulProxy
 @EnableDiscoveryClient
-public class OrderServer {
+public class GatewayServer {
+
     public static void main(String[] args) {
-        SpringApplication.run(OrderServer.class, args);
+        SpringApplication.run(GatewayServer.class, args);
     }
 }

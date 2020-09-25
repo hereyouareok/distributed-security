@@ -1,6 +1,6 @@
 package com.it.security.distributed.uaa.service;
 
-
+import com.alibaba.fastjson.JSON;
 import com.it.security.distributed.uaa.dao.UserDao;
 import com.it.security.distributed.uaa.model.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author YanQin
- * @version v1.0.0
- * @Description : TODO
- * @Create on : 2020/9/20 00:02
+ * @author Administrator
+ * @version 1.0
  **/
 @Service
 public class SpringDataUserDetailsService implements UserDetailsService {
@@ -24,22 +22,24 @@ public class SpringDataUserDetailsService implements UserDetailsService {
     @Autowired
     UserDao userDao;
 
+    //根据 账号查询用户信息
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("username:"+username);
-        UserDetails userDetails=null;
-        UserDto userDto = userDao.getUserByName(username);
+
+        //将来连接数据库根据账号查询用户信息
+        UserDto userDto = userDao.getUserByUsername(username);
         if(userDto == null){
-            //查不到用户就返回null 由provider来抛出异常
+            //如果用户查不到，返回null，由provider来抛出异常
             return null;
         }
-        //根据用户id查询用户权限
-        List<String> permissionsByUserId = userDao.findPermissionsByUserId(userDto.getId());
-        //转成数组
-        String[] permissionsArray=new String[permissionsByUserId.size()];
-        permissionsByUserId.toArray(permissionsArray);
-        //拿到数据库的数据与前端传过来的数据进行认证与授权比对
-        userDetails= User.withUsername(userDto.getUsername()).password(userDto.getPassword()).authorities(permissionsArray).build();
+        //根据用户的id查询用户的权限
+        List<String> permissions = userDao.findPermissionsByUserId(userDto.getId());
+        //将permissions转成数组
+        String[] permissionArray = new String[permissions.size()];
+        permissions.toArray(permissionArray);
+        //将userDto转成json
+        String principal = JSON.toJSONString(userDto);
+        UserDetails userDetails = User.withUsername(principal).password(userDto.getPassword()).authorities(permissionArray).build();
         return userDetails;
     }
 }

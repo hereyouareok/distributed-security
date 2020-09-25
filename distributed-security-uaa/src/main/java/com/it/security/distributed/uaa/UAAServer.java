@@ -7,10 +7,8 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * @author YanQin
- * @version v1.0.0
- * @Description : TODO
- * @Create on : 2020/9/21 18:58
+ * @author Administrator
+ * @version 1.0
  **/
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -18,6 +16,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = {"com.it.security.distributed.uaa"})
 public class UAAServer {
     public static void main(String[] args) {
-        SpringApplication.run(UAAServer.class,args);
+        SpringApplication.run(UAAServer.class, args);
     }
 }
